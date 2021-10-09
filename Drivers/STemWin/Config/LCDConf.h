@@ -65,7 +65,7 @@ Purpose     : Display driver configuration file
 #define VXSIZE_PHYS         800
 #define VYSIZE_PHYS         480
 
-#elif ILI9481
+#elif defined ILI9481
 
 #define XSIZE_PHYS  320 // To be adapted to x-screen size
 #define YSIZE_PHYS  480 // To be adapted to y-screen size

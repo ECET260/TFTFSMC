@@ -447,21 +447,21 @@ void InitLCD_ILI9481(void)
     LcdWriteData(0x01);
     LcdWriteData(0x11);
 
-    LcdWriteReg(0xc0);		// Setting Panel Driving
+    LcdWriteReg(ILI9341_POWER1);		// Setting Panel Driving
     LcdWriteData(0x10);		// Set the scan mode 00
     LcdWriteData(0x3b);		// set the number of lines 480 lines 3B
     LcdWriteData(0x00);
     LcdWriteData(0x02);		// 5frames 02
     LcdWriteData(0x11);
 
-    LcdWriteReg(0xc1);		// Setting the Timing
+    LcdWriteReg(ILI9341_POWER2);		// Setting the Timing
     LcdWriteData(0x10);
     LcdWriteData(0x0b);
     LcdWriteData(0x88);
 
 
 
-    LcdWriteReg(0xC5);		// the Frame Rate Control Inversion
+    LcdWriteReg(ILI9341_VCOM1);		// the Frame Rate Control Inversion
     LcdWriteData(0x01);
 
     LcdWriteReg(0xC8);		// gamma correction, the subsequent 12 parameters
@@ -482,17 +482,17 @@ void InitLCD_ILI9481(void)
 //    LcdWriteData(0x0a);//0a no effect
 
 
-    LcdWriteReg(0x3a);		//Set_pixel_format
+    LcdWriteReg(ILI9341_PIXEL_FORMAT);		//Set_pixel_format
     LcdWriteData(0x55);		//16bit/pixel (65,536 colors)
 
 
-    LcdWriteReg(0x2a);
+    LcdWriteReg(ILI9341_COLUMN_ADDR);
     LcdWriteData(0x00);
     LcdWriteData(0x00);
     LcdWriteData(0x01);
     LcdWriteData(0x3f);
 
-    LcdWriteReg(0x2b);
+    LcdWriteReg(ILI9341_PAGE_ADDR);
     LcdWriteData(0x00);
     LcdWriteData(0x00);
     LcdWriteData(0x01);
@@ -501,8 +501,8 @@ void InitLCD_ILI9481(void)
 
     HAL_Delay(50);
 
-    LcdWriteReg(0x29);		//Set_display_on
-    LcdWriteReg(0x2c);		// start writing data
+    LcdWriteReg(ILI9341_DISPLAY_ON);		//Set_display_on
+    LcdWriteReg(ILI9341_GRAM);		// start writing data
     HAL_Delay(25);
 
 }

@@ -338,9 +338,9 @@ void LCD_X_Config(void) {
   //
 #ifdef SSD1289
   pDevice = GUI_DEVICE_CreateAndLink(GUIDRV_FLEXCOLOR, GUICC_M565, 0, 0);		//mel GUICC_565 will swap red and blue - might need for bmp display
-#elif ILI9481
-  pDevice = GUI_DEVICE_CreateAndLink(GUIDRV_FLEXCOLOR, GUICC_M565, 0, 0);		//was565
-#elif SSD1963
+#elif defined ILI9481
+  pDevice = GUI_DEVICE_CreateAndLink(GUIDRV_FLEXCOLOR, GUICC_565, 0, 0);		//was565
+#elif defined SSD1963
   pDevice = GUI_DEVICE_CreateAndLink(GUIDRV_FLEXCOLOR, GUICC_M565, 0, 0);
 #else
   pDevice = GUI_DEVICE_CreateAndLink(GUIDRV_FLEXCOLOR, GUICC_565, 0, 0);		//ili9341 was 565
@@ -358,13 +358,20 @@ void LCD_X_Config(void) {
   //
 
 #ifdef ILI9481
-  Config.Orientation = GUI_SWAP_XY ; //| GUI_MIRROR_Y; //GUI_SWAP_XY | GUI_MIRROR_Y;
+  Config.Orientation = GUI_SWAP_XY ;//| GUI_MIRROR_Y; //GUI_SWAP_XY | GUI_MIRROR_Y;
 #elif SSD1963
 
 #else
   Config.Orientation = GUI_SWAP_XY | GUI_MIRROR_Y;
 #endif
-  Config.NumDummyReads = 2; //SSD1289 needs 1 dummy read 2021-oct-09 changed to 2 for ili9341 new libs
+
+#ifdef ILI9341
+  Config.NumDummyReads = 2; //ILI9341 needs 2 dummy reads 2021-oct-09 changed for new libs
+#elif defined SSD1289
+  Config.NumDummyReads = 1; //SSD1289 needs 1 dummy read
+#else
+  Config.NumDummyReads = 1;
+#endif
   GUIDRV_FlexColor_Config(pDevice, &Config);
   //
   // Set controller and operation mode
@@ -385,23 +392,20 @@ void LCD_X_Config(void) {
 #ifdef SSD1289
   //ssd1289
   GUIDRV_FlexColor_SetFunc(pDevice, &PortAPI, GUIDRV_FLEXCOLOR_F66702, GUIDRV_FLEXCOLOR_M16C0B16);
-#endif
-#ifdef ILI9341
+#elif defined ILI9341
   //ili9341
   GUIDRV_FlexColor_SetFunc(pDevice, &PortAPI, GUIDRV_FLEXCOLOR_F66709, GUIDRV_FLEXCOLOR_M16C0B16);
-#endif
-#ifdef ILI9481
+#elif defined ILI9481
   //ili9481
   GUIDRV_FlexColor_SetFunc(pDevice, &PortAPI, GUIDRV_FLEXCOLOR_F66709, GUIDRV_FLEXCOLOR_M16C0B16);
-#endif
-#ifdef SSD1963
+#elif defined SSD1963
   //ssd1963
   GUIDRV_FlexColor_SetFunc(pDevice, &PortAPI, GUIDRV_FLEXCOLOR_F66720, GUIDRV_FLEXCOLOR_M16C0B16);
+#else
+
+	#error "Define SSD1289, ILI9341, ILI9481, or SSD1963"
+
 #endif
-
-//	#error "Define SSD1289, ILI9341, ILI9481, or SSD1963"
-
-
   //GUIDRV_FlexColor_SetReadFunc66720_B16(pDevice, GUIDRV_FLEXCOLOR_READ_FUNC_II);
 
   /*

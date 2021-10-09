@@ -68,6 +68,23 @@ bool Down=true;
 int xAccel=1;
 int yAccel=1;
 
+#ifdef ILI9341
+#define TFTX 320
+#define TFTY 240
+
+#elif defined ILI9481
+#define TFTX 480
+#define TFTY 320
+
+#elif defined SSD1963
+#define TFTX 800
+#define TFTY 480
+
+#else
+#define TFTX 320
+#define TFTY 240
+
+#endif
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -94,7 +111,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
 	int count = 0;
 	char countString[10];
-	int xpos=-30;
+	int xpos=0;
 	int ypos=0;
 
 	PROGBAR_Handle hProgbar;
@@ -266,7 +283,7 @@ int main(void)
 
 	GUI_Exec();
 
-	hSprite = GUI_SPRITE_Create(&bmlemmling_Cartoon_penguin_small, xpos,100);
+	hSprite = GUI_SPRITE_Create(&bmlemmling_Cartoon_penguin_small, xpos,ypos);
 //	hSprite = GUI_SPRITE_Create(&bmledCircleOrange, 50,50);
 
 
@@ -353,7 +370,7 @@ int main(void)
 //	 			xpos-=xAccel;
 //	 		}
 	 		Right ? (xpos+=xAccel) : (xpos-=xAccel); //move in x direction
-	 		if (xpos>320-60){		//check for right edge
+	 		if (xpos>TFTX-60){		//check for right edge
 	 			Right=false;
 	 			xAccel=rand()%6;
 	 		}
@@ -363,7 +380,7 @@ int main(void)
 	 		}
 
 	 		Down ? ypos++: ypos--;	//move in y direction
-	 		if (ypos>240-60){		//check bottom edge
+	 		if (ypos>TFTY-60){		//check bottom edge
 	 			Down=false;
 	 			yAccel=rand()%6;
 	 		}
